@@ -1,0 +1,9 @@
+# Local cargo configuration
+
+[unstable]
+build-std-features = ["compiler-builtins-mem"]   # For memory-related intrinsics
+build-std = ["core", "compiler_builtins"]
+
+# Set a default target for cargo build
+[build]
+target = "x86_64-rain_os.json"
