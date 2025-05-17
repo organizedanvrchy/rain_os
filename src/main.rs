@@ -29,3 +29,5 @@ fn panic(_info: &PanicInfo) -> ! {
     loop {}
 }
 
+// Rust module to handle printing
+mod vga_buffer;
