@@ -2,14 +2,15 @@
 use volatile::Volatile;
 use core::fmt;
 use lazy_static::lazy_static;
+use spin::Mutex;
 
-// Define WRITER using lazy_static
+// Define WRITER using lazy_static and spinlocks
 lazy_static! {
-    pub static WRITER: Writer = Writer {
+    pub static WRITER: Mutex<Writer> = Mutex::new(Writer {
         column_position: 0,
         color_code: ColorCode::new(Color::Yellow, Color::Black),
         buffer: unsafe { &mut *(0xb8000 as *mut Buffer) },
-    }
+    });
 }
 
 // Disable compiler warnings for each unused variant
@@ -145,19 +146,3 @@ impl fmt::Write for Writer {
         Ok(())
     }
 }
-
-pub fn print_test() {
-    use core::fmt::Write;
-    let mut writer = Writer {
-        column_position: 0,
-        color_code: ColorCode::new(Color::Yellow, Color::Black),
-        buffer: unsafe { &mut *(0xb8000 as *mut Buffer) },
-    };
-
-    writer.write_byte(b'H');
-    writer.write_string("ello ");
-    // Call unwrap to panic if an error occurs
-    write!(writer, "The numbers are {} and {}", 42, 1.0/3.0).unwrap();
-}
-
-
