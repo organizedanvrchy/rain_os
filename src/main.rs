@@ -6,7 +6,6 @@
 #![test_runner(crate::test_runner)]
 #![reexport_test_harness_main = "test_main"] // Set name of test framework function to test_main
 
-
 use core::panic::PanicInfo;
 
 // _start function to overwrite system entry point
@@ -31,7 +30,7 @@ fn panic(info: &PanicInfo) -> ! {
 // Rust module to handle printing
 mod vga_buffer;
 
-// Call serial module
+// Serial module to handle print to console
 mod serial;
 
 // QEMU exit function with specified exit status 
@@ -53,14 +52,33 @@ pub fn exit_qemu(exit_code: QemuExitCode) {
     }
 }
 
-// Custom test framework 
+// **Custom test framework**
+
+// Test traits
+pub trait Testable {
+    fn run(&self) -> ();
+}
+
+// Implement trait for all types of T that Implement Fn() trait
+impl<T> Testable for T
+where
+    T:Fn(),
+{
+    fn run(&self) {
+        serial_print!("{}...\t", core::any::type_name::<T>());
+        self();
+        serial_println!("[ok]");
+    }
+}
+
+// Test Runner
 #[cfg(test)]
-// Slice of trait object (&[&dyn Fn()]) that 
-// references the Fn() trait
-pub fn test_runner(tests: &[&dyn Fn()]) {
+// Slice of trait object (&[&dyn Testable]) that 
+// references the Testable trait
+pub fn test_runner(tests: &[&dyn Testable]) {
     serial_println!("Running {} tests", tests.len());     
     for test in tests {
-        test();
+        test.run();
     }
     exit_qemu(QemuExitCode::Success);
 }
@@ -78,8 +96,6 @@ fn panic(info: &PanicInfo) -> ! {
 // Test Case
 #[test_case]
 fn trivial_assertion() {
-    serial_print!("trivial assertion... ");
-    assert_eq!(0, 1);
-    serial_println!("[ok]");
+    assert_eq!(1, 1);
 }
 

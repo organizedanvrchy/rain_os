@@ -166,3 +166,30 @@ pub fn _print(args: fmt::Arguments) {
     WRITER.lock().write_fmt(args).unwrap();
 }
 
+// **Testing VGA Buffer**
+
+// Test println works without panicking
+#[test_case]
+fn test_println_simple() {
+    println!("test_println_simple output");
+}
+
+// Test is panic occurs even if many lines are printable and shifted off screen
+#[test_case]
+fn test_println_many() {
+    for _ in 0..200 {
+        println!("test_println_many output");
+    }
+}
+
+// Test to verify that printed lines really appear on the screen
+#[test_case]
+fn test_println_output() {
+    let s = "Some test string that fits on a single line";
+    println!("{}", s);
+    for (i, c) in s.chars().enumerate() {
+        let screen_char = WRITER.lock().buffer.chars[BUFFER_HEIGHT - 2][i].read();
+        assert_eq!(char::from(screen_char.ascii_character), c);
+    }
+}
+
