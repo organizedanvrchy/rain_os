@@ -1,13 +1,11 @@
 // main.rs
 
-// Stops linking to Rust standard library
-#![no_std]
-// Disables all rust-level entry points
-#![no_main]     
+#![no_std] // Stops linking to Rust standard library
+#![no_main] // Disables all rust-level entry points 
 #![feature(custom_test_frameworks)]
 #![test_runner(crate::test_runner)]
-// Set name of test framework function to test_main
-#![reexport_test_harness_main = "test_main"] 
+#![reexport_test_harness_main = "test_main"] // Set name of test framework function to test_main
+
 
 use core::panic::PanicInfo;
 
@@ -31,6 +29,9 @@ fn panic(info: &PanicInfo) -> ! {
 
 // Rust module to handle printing
 mod vga_buffer;
+
+// Call serial module
+mod serial;
 
 // QEMU exit function with specified exit status 
 // (different from default QEMU codes)
@@ -56,7 +57,7 @@ pub fn exit_qemu(exit_code: QemuExitCode) {
 // Slice of trait object (&[&dyn Fn()]) that 
 // references the Fn() trait
 pub fn test_runner(tests: &[&dyn Fn()]) {
-    println!("Running {} tests", tests.len());     
+    serial_println!("Running {} tests", tests.len());     
     for test in tests {
         test();
     }
@@ -65,8 +66,8 @@ pub fn test_runner(tests: &[&dyn Fn()]) {
 
 #[test_case]
 fn trivial_assertion() {
-    print!("trivial assertion... ");
-    assert_eq!(1, 1);
-    println!("[ok]");
+    serial_print!("trivial assertion... ");
+    assert_eq!(0, 1);
+    serial_println!("[ok]");
 }
 
