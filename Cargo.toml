@@ -23,6 +23,11 @@ test-args = [
 test-success-exit-code = 33
 test-timeout = 5
 
+# Disable harness flag for test
+[[test]]
+name = "should_panic"
+harness = false
+
 [profile.dev]
 # panic = "abort"
 
