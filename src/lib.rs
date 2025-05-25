@@ -3,13 +3,16 @@
 #![feature(custom_test_frameworks)]
 #![test_runner(crate::test_runner)]
 #![reexport_test_harness_main = "test_main"]
+#![feature(abi_x86_interrupt)]
 
 use core::panic::PanicInfo;
 
-// Serial module to handle print to console
+// Module to handle print to console
 pub mod serial;
-// Rust module to handle printing
+// Module to handle print to VGA buffer
 pub mod vga_buffer;
+// Interrupt handler module
+pub mod interrupts;
 
 // **Custom test framework**
 // Test traits
