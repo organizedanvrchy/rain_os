@@ -1,3 +1,5 @@
+// lib.rs
+
 #![no_std]
 #![cfg_attr(test, no_main)]
 #![feature(custom_test_frameworks)]
@@ -13,6 +15,11 @@ pub mod serial;
 pub mod vga_buffer;
 // Interrupt handler module
 pub mod interrupts;
+
+// General Interrupt init function
+pub fn init() {
+    interrupts::init_idt();
+}
 
 // **Custom test framework**
 // Test traits
@@ -49,7 +56,7 @@ pub fn test_panic_handler(info: &PanicInfo) -> ! {
     loop{}
 }
 
-// QEMU exit function with specified exit status 
+// **QEMU exit function** with specified exit status 
 // (different from default QEMU codes)
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 #[repr(u32)]
@@ -68,10 +75,11 @@ pub fn exit_qemu(exit_code: QemuExitCode) {
     }
 }
 
-// **Entry Point for `cargo xtest`**
+// **Entry Point for `cargo test`**
 #[cfg(test)]
 #[unsafe(no_mangle)]
 pub extern "C" fn _start() -> ! {
+    init();
     test_main();
     loop{}
 }
@@ -83,3 +91,8 @@ fn panic(info: &PanicInfo) -> ! {
     test_panic_handler(info)
 }
 
+// Breakpoint Exception Test
+#[test_case]
+fn test_breakpoint_exception() {
+    x86_64::instructions::interrupts::int3();
+}
