@@ -15,8 +15,11 @@ pub extern "C" fn _start() -> ! {
 
     rain_os::init();
 
-    // Invoke breakpoint exception
-    x86_64::instructions::interrupts::int3();
+    // Trigger page fault
+    unsafe {
+        *(0xdeadbeef as *mut u8) = 42;
+    };
+
 
     #[cfg(test)]
     test_main();
