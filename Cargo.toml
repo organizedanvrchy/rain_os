@@ -25,7 +25,7 @@ test-timeout = 5
 
 # Disable harness flag for test
 [[test]]
-name = "should_panic"
+name = "stack_overflow"
 harness = false
 
 [profile.dev]
