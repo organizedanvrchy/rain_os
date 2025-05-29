@@ -15,9 +15,12 @@ pub mod serial;
 pub mod vga_buffer;
 // Interrupt handler module
 pub mod interrupts;
+// Task State Segment module
+pub mod gdt;
 
-// General Interrupt init function
+// Load IDT and GDT
 pub fn init() {
+    gdt::init();
     interrupts::init_idt();
 }
 
