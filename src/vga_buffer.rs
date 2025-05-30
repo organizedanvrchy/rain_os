@@ -1,4 +1,5 @@
-// vga_buffer
+// src/vga_buffer.rs
+
 use volatile::Volatile;
 use core::fmt;
 use lazy_static::lazy_static;
