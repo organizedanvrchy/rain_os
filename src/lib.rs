@@ -26,6 +26,13 @@ pub fn init() {
     x86_64::instructions::interrupts::enable();
 }
 
+// hlt loop to halt CPU until next interrupt
+pub fn hlt_loop() -> ! {
+    loop {
+        x86_64::instructions::hlt();
+    }
+}
+
 // **Custom test framework**
 // Test traits
 pub trait Testable {

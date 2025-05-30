@@ -27,10 +27,7 @@ pub extern "C" fn _start() -> ! {
     test_main();
     
     println!("It did not crash!");
-    loop {
-        use rain_os::print;
-        print!("-");
-    }
+    rain_os::hlt_loop();
 }
 
 // Function called on panic
@@ -38,7 +35,7 @@ pub extern "C" fn _start() -> ! {
 #[panic_handler]
 fn panic(info: &PanicInfo) -> ! {
     println!("{}", info);
-    loop {}
+    rain_os::hlt_loop();
 }
 
 #[cfg(test)]
