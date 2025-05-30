@@ -19,11 +19,11 @@ pub enum InterruptIndex {
 }
 
 impl InterruptIndex {
-    fn as_u8(self) -> {
+    fn as_u8(self) -> u8 {
         self as as_u8
     }
 
-    fn as_usize(self) -> {
+    fn as_usize(self) -> usize {
         usize::from(self.as_u8())
     }
 }
@@ -63,7 +63,7 @@ extern "x86-interrupt" fn double_fault_handler(
 extern "x86-interrupt" fn timer_interrupt_handler(
     _stack_frame: InterruptStackFrame)
 {
-    print(".")
+    print!(".")
 }
 
 
