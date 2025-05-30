@@ -1,4 +1,4 @@
-// lib.rs
+// src/lib.rs
 
 #![no_std]
 #![cfg_attr(test, no_main)]
@@ -23,6 +23,7 @@ pub fn init() {
     gdt::init();
     interrupts::init_idt();
     unsafe {interrupts::PICS.lock().initialize()};
+    x86_64::instructions::interrupts::enable();
 }
 
 // **Custom test framework**
