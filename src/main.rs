@@ -1,4 +1,5 @@
-// main.rs
+// src/main.rs
+
 #![no_std] // Stops linking to Rust standard library
 #![no_main] // Disables all rust-level entry points 
 #![feature(custom_test_frameworks)]
@@ -26,7 +27,10 @@ pub extern "C" fn _start() -> ! {
     test_main();
     
     println!("It did not crash!");
-    loop {}
+    loop {
+        use rain_os::print;
+        print!("-");
+    }
 }
 
 // Function called on panic
