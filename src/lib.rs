@@ -18,10 +18,11 @@ pub mod interrupts;
 // Task State Segment module
 pub mod gdt;
 
-// Load IDT and GDT
+// Load IDT and GDT, and PIC
 pub fn init() {
     gdt::init();
     interrupts::init_idt();
+    unsafe {interrupts::PICS.lock().initialize()};
 }
 
 // **Custom test framework**
