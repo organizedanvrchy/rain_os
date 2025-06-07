@@ -22,6 +22,10 @@ pub extern "C" fn _start() -> ! {
     // }
 
     // stack_overflow();
+    
+    // Trigger page fault
+    let ptr = 0xdeadbeaf as *mut u8;
+    unsafe { *ptr = 42; }
 
     #[cfg(test)]
     test_main();
