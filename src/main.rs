@@ -24,8 +24,19 @@ pub extern "C" fn _start() -> ! {
     // stack_overflow();
     
     // Trigger page fault
-    let ptr = 0xdeadbeaf as *mut u8;
+    // let ptr = 0xdeadbeaf as *mut u8;
+    // unsafe { *ptr = 42; }
+
+    // Trigger page fault #2
+    let ptr = 0x2031b2 as *mut u8;
+
+    // read from a code page
+    unsafe { let x = *ptr; }
+    println!("read worked!");
+
+    // write to a code page
     unsafe { *ptr = 42; }
+    println!("write worked!");
 
     #[cfg(test)]
     test_main();
