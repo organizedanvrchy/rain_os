@@ -28,15 +28,21 @@ pub extern "C" fn _start() -> ! {
     // unsafe { *ptr = 42; }
 
     // Trigger page fault #2
-    let ptr = 0x2031b2 as *mut u8;
+    // let ptr = 0x2031b2 as *mut u8;
 
     // read from a code page
-    unsafe { let x = *ptr; }
-    println!("read worked!");
+    // unsafe { let x = *ptr; }
+    // println!("read worked!");
 
     // write to a code page
-    unsafe { *ptr = 42; }
-    println!("write worked!");
+    // unsafe { *ptr = 42; }
+    // println!("write worked!");
+    
+    // Accessing Page Tables
+    use x86_64::registers::control::Cr3;
+
+    let (level_4_page_table, _) = Cr3::read();
+    println!("Level 4 page table at: {:?}", level_4_page_table.start_address());
 
     #[cfg(test)]
     test_main();
